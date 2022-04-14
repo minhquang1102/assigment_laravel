@@ -49,7 +49,7 @@
                             @method('DELETE')
                             {{-- <input type="text" name="_method" value="DELETE"> --}}
                             @csrf
-                            {{-- <input type="text" name="csrf_token" value="asdadasd"> --}}
+                            {{-- <input type="text" name="csrf_token" value=""> --}}
                             <button type="submit" class="btn btn-danger">
                                 Delete
                             </button>

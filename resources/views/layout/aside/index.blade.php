@@ -14,9 +14,11 @@
                 <img src="{{ asset('/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
                     alt="User Image">
             </div>
+            @if(Auth::check())
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">{{auth()->user()->name}}</a>
             </div>
+            @endif
         </div>
 
         <!-- SidebarSearch Form -->
@@ -59,6 +61,11 @@
                 <li class="nav-item">
                     <a href="{{route('users.index')}}" class="nav-link {{Route::is('users.index') ? 'active' : ''}}">
                         <p>Users</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('auth.logout')}}" class="nav-link">
+                        <p class="text-danger">Logout</p>
                     </a>
                 </li>
             </ul>

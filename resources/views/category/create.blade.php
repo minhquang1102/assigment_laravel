@@ -55,7 +55,7 @@
             />
         </div>
         <div class="form-group">
-            <label for="name">Parent ID</label>
+            <label for="parent_id">Parent ID</label>
             <input
                 name="parent_id"
                 class="form-control"
@@ -91,6 +91,8 @@
             </a>
         </div>
     </form>
+
+    
 
     
 

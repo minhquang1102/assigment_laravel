@@ -11,8 +11,8 @@
 @section('content')
     <form
         action="{{isset($product)
-            ? route('categories.update', $product->id)
-            : route('categories.store')}}"
+            ? route('products.update', $product->id)
+            : route('products.store')}}"
         class="form"
         method="POST"
     >
@@ -55,6 +55,33 @@
             />
         </div>
         <div class="form-group">
+            <label for="price">Price</label>
+            <input
+                name="price"
+                class="form-control"
+                id="price"
+                value="{{isset($product) ? $product->price : ''}}"
+            />
+        </div>
+        <div class="form-group">
+            <label for="image_url">Image</label>
+            <input
+                name="image_url"
+                class="form-control"
+                id="image_url"
+                value="{{isset($product) ? $product->image_url : ''}}"
+            />
+        </div>
+        <div class="form-group">
+            <label for="category_id">Category ID</label>
+            <input
+                name="category_id"
+                class="form-control"
+                id="category_id"
+                value="{{isset($product) ? $product->category_id : ''}}"
+            />
+        </div>
+        <div class="form-group">
             <input
                 type="radio"
                 name="status"
@@ -76,8 +103,8 @@
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Sumit</button>
-            <a href="{{route('categories.index')}}" class="btn btn-warning">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{{route('products.index')}}" class="btn btn-warning">
                 Cancel
             </a>
         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -23,9 +24,9 @@ class ProductController extends Controller
         // lay danh sach va kem ban ghi quan he
         // with() ngay trong cau truy van
         $productsGet = Product::select('id', 'name', 'price', 'category_id')
-            // ->with('category', function ($query) {
-            //     $query->select('id', 'name');
-            // })
+            ->with('category', function ($query) {
+                $query->select('id', 'name');
+            })
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -33,16 +34,27 @@ class ProductController extends Controller
         // dd('Danh sach category', $categories, $categoriesGet);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    // Tao ban ghi product moi
+    public function create()
+    {
+        return view('product.create');
+    }
+
+    
     public function store(Request $request)
     {
-        //
+        $productRequest = $request->all();
+        $product = new Product();
+        $product->name = $productRequest['name'];
+        $product->description = $productRequest['description'];
+        $product->price = $productRequest['price'];
+        $product->image_url = $productRequest['image_url'];
+        $product->status = $productRequest['status'];
+        $product->category_id = $productRequest['category_id'];
+        // use Illuminate\Support\Str;
+
+        $product->save();
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -52,9 +64,15 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     // Tra ve thong tin ban ghi product theo id
-    public function show($id)
+    public function edit(Product $id)
     {
-        //
+        $products = $id->products;
+        $productsWithPaginate = $id
+            ->products()->select('name')->paginate(10);
+        return view('product.create', [
+            'product' => $id,
+            'products' => $productsWithPaginate
+        ]);
     }
 
     /**
@@ -65,9 +83,20 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     // Cap nhat thong tin cua 1 ban ghi
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, Product $id)
     {
-        //
+        $proUpdate = $id;
+        // Gan gia tri moi cho doi tuong $cateUpdate
+        $proUpdate->name = $request->name;
+        $proUpdate->description = $request->description;
+        $proUpdate->price = $request->price;
+        $proUpdate->image_url = $request->image_url;
+        $proUpdate->status = $request->status;
+        $proUpdate->category_id = $request->category_id;
+        // Thuc thi viec luu du lieu moi vao DB
+        $proUpdate->update();
+        // Quay ve danh sach
+        return redirect()->route('products.index');
     }
 
     /**

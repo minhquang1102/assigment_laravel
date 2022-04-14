@@ -6,11 +6,11 @@
     voi ten tuong ung --}}
 @section('title', 'Product page')
 
-@section('content-title', 'Product page')
+@section('content-title', 'User page')
 
 @section('content')
     <div>
-        <a href="{{route('products.create')}}">
+        <a href="{{route('users.create')}}">
             <button class="btn btn-primary">Create</button>
         </a>
     </div>
@@ -18,30 +18,28 @@
         <thead>
             <th>ID</th>
             <th>Name</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Price</th>
-            <th>Image</th>
-            <th>Category</th>
+            <th>Date</th>
+            <th>Email</th>
+            <th>Password</th>
             <th>Actions</th>
         </thead>
         <tbody>
-            @foreach ($products as $product)
+            @foreach ($users as $user)
                 <tr>
-                    <td>{{ $product->id }}</td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->description ?: 'N/A' }}</td>
-                    <td>{{ $product->status == 1 ? 'Active' : 'Deactive' }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td><img width="100" src="{{$product->image_url}}" alt=""></td>
-                    <td>{{ $product->category_id}}</td>
+                    <td>{{ $user->id }}</td>
+                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->date }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>{{ $user->password }}</td>
                     <td>
                         <a
-                            href="{{route('products.edit', $product->id)}}"
+                            href="{{route('users.edit', $user->id)}}"
                             class="btn btn-warning"
                         >Edit</a>
+
+                        @if (auth()->user()->id !== $user->id)
                         <form
-                            action="{{route('products.delete', $product->id)}}"
+                            action="{{route('users.delete', $user->id)}}"
                             method="POST"
                         >
                             @method('DELETE')
@@ -52,10 +50,11 @@
                                 Delete
                             </button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-    {{ $products->links() }}
+    {{ $users->links() }}
 @endsection

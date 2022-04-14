@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\LoginController;
 // Su dung Request $request trong callback cua route
 
 /*
@@ -51,7 +53,7 @@ Route::get('/login', function () {
     ]);
 });
 
-Route::get('/', function () {
+Route::middleware('auth')->get('/', function () {
     $students = [
         [
             'name' => 'quangnmph07375',
@@ -91,7 +93,8 @@ Route::get('/users/{userId}/{username?}', function (
 
 // prefix: duong dan chung cua group, noi -> /categories/create
 // name: name chung cua group, noi cac name con: categories.index
-Route::prefix('/categories')->name('categories.')->group(function () {
+
+Route::middleware('auth')->prefix('/categories')->name('categories.')->group(function () {
     // danh sach
     Route::get('/', [CategoryController::class, 'index'])->name('index');
     // tao moi
@@ -104,7 +107,7 @@ Route::prefix('/categories')->name('categories.')->group(function () {
     Route::delete('/{cate}', [CategoryController::class, 'delete'])->name('delete');
 });
 
-Route::prefix('/products')->name('products.')->group(function () {
+Route::middleware('auth')->prefix('/products')->name('products.')->group(function () {
     // danh sach
     Route::get('/', [ProductController::class, 'index'])->name('index');
     // tao moi
@@ -117,10 +120,24 @@ Route::prefix('/products')->name('products.')->group(function () {
     Route::delete('/{pro}', [ProductController::class, 'delete'])->name('delete');
 });
 
-Route::prefix('/users')->name('users.')->group(function () {
+Route::middleware('auth')->prefix('/users')->name('users.')->group(function () {
     // danh sach
     Route::get('/', [UsersController::class, 'index'])->name('index');
-    
+    // tao moi
+    Route::get('/create', [UsersController::class, 'create'])->name('create');
+    Route::post('/store', [UsersController::class, 'store'])->name('store');
+    // chinh sua
+    Route::get('/edit/{id}', [UsersController::class, 'edit'])->name('edit');
+    Route::put('/update/{id}', [UsersController::class, 'update'])->name('update');
     // xoa
     Route::delete('/{id_users}', [UsersController::class, 'delete'])->name('delete');
+});
+
+// Logout phải được tiến hành khi người dùng đã đăng nhập, nên middleware là auth
+Route::get('/auth/logout', [LoginController::class, 'logout'])
+    ->middleware('auth')->name('auth.logout');
+
+Route::middleware('guest')->prefix('/auth')->name('auth.')->group(function () {
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('post-login');
 });

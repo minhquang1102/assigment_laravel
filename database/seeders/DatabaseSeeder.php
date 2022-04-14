@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // User::factory(20)->create();
+        User::factory(20)->create();
 
-        Category::factory(50)->create();
+        // Category::factory(50)->create();
 
-        Product::factory(50)->create();
+        // Product::factory(50)->create();
 
     }
 }
